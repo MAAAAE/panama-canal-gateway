@@ -1,10 +1,6 @@
 package io.maaaae.panama_canal_gateway.domain
 
-import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
-import jakarta.persistence.Id
-import jakarta.persistence.Table
+import jakarta.persistence.*
 
 @Entity
 @Table(name = "dynamic_route_config")
@@ -14,5 +10,7 @@ data class DynamicRouteConfig(
     val uri: String,
     val predicates: String,
     val filters: String,
-    val routeOrder: Int
+    val routeOrder: Int,
+    @OneToMany(mappedBy = "dynamicRouteConfig", orphanRemoval = true)
+    val filterConfigs: MutableList<FilterConfig> = mutableListOf()
 )
