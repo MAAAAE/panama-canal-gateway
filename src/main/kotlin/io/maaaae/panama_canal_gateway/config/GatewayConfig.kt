@@ -2,6 +2,8 @@ package io.maaaae.panama_canal_gateway.config
 
 import io.maaaae.panama_canal_gateway.domain.DynamicRouteConfig
 import io.maaaae.panama_canal_gateway.domain.RouteConfigRepository
+import jakarta.transaction.Transactional
+import org.springframework.cloud.gateway.filter.FilterDefinition
 import org.springframework.cloud.gateway.route.RouteDefinition
 import org.springframework.cloud.gateway.route.RouteDefinitionLocator
 import org.springframework.cloud.gateway.route.RouteLocator
@@ -16,6 +18,7 @@ import java.net.URI
 @Service
 class DynamicRouteService(private val routeConfigRepository: RouteConfigRepository) : RouteDefinitionLocator {
 
+    @Transactional
     override fun getRouteDefinitions(): Flux<RouteDefinition> {
         val routes = routeConfigRepository.findAll()
         val routeDefinitions = routes.map { routeConfig ->
@@ -26,14 +29,13 @@ class DynamicRouteService(private val routeConfigRepository: RouteConfigReposito
                     name = "Path"
                     args = mapOf("pattern" to routeConfig.predicates)
                 })
-                filters = listOf(org.springframework.cloud.gateway.filter.FilterDefinition().apply {
-                    name = "AddRequestHeader"
-                    args = mapOf("Name" to "X-Request-Color", "Value" to "blue")
-                })
+                filters = routeConfig.filterConfigs.map {
+                    FilterDefinition().apply {
+                        name = it.filterName
+                        args = mapOf("Name" to it.param, "Value" to it.value)
+                    }
+                }
             }
-        }
-        routeDefinitions.asSequence().forEach {
-            println("${it.predicates}: ${it.uri}")
         }
         return Flux.fromIterable(routeDefinitions)
     }
