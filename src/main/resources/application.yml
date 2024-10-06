@@ -2,14 +2,23 @@ spring:
   application:
     name: panama-canal-gateway
   datasource:
-    url: jdbc:sqlite:/Users/choisanghyun/Documents/spring/panama-canal-backend/data/panama.db?cache=shared
+    url: ${SPRING_DATASOURCE_URL:jdbc:sqlite:/Users/choisanghyun/Documents/panama-canal/data/panama.db?cache=shared}
     driverClassName: org.sqlite.JDBC
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     show-sql: true
     database-platform: org.hibernate.community.dialect.SQLiteDialect
+  cloud:
+    gateway:
+      metrics:
+        enabled: true
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
 
 server:
   port: 8888
