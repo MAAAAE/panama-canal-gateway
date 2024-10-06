@@ -30,6 +30,8 @@ dependencies {
 	implementation("org.hibernate.orm:hibernate-community-dialects")
 	implementation("io.netty:netty-resolver-dns-native-macos:4.1.94.Final:osx-aarch_64")
 	implementation ("org.springframework.boot:spring-boot-starter-actuator")
+	implementation ("io.micrometer:micrometer-registry-prometheus")
+
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
