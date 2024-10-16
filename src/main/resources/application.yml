@@ -1,9 +1,12 @@
 spring:
+  config:
+    import: optional:file:.env[.properties]
+
   application:
     name: panama-canal-gateway
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:sqlite:/Users/choisanghyun/Documents/panama-canal/data/panama.db?cache=shared}
-    driverClassName: org.sqlite.JDBC
+    url: ${SPRING_DATASOURCE_URL:jdbc:sqlite:/Users/choisanghyun/Documents/spring/panama-canal-backend/data/panama.db?cache=shared}
+    driverClassName: ${SPRING_DATASOURCE_DRIVER_CLASS_NAME:org.sqlite.JDBC}
   jpa:
     hibernate:
       ddl-auto: none
@@ -25,4 +28,4 @@ management:
       exposure:
         include: "info,health,gateway,metrics"
 server:
-  port: 8888
+  port: ${GATEWAY_PORT:8888}
